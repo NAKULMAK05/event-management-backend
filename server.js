@@ -11,6 +11,8 @@ import eventRoutes from './routes/eventRoutes.js';
 import statRoutes from './routes/Stat.js';
 import userRoutes from './routes/userRoutes.js';
 import { User } from './models/User.js'; // Import User model
+import bodyParser from 'body-parser';
+
 
 // Load environment variables
 dotenv.config();
@@ -73,6 +75,8 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json()); // Parse incoming JSON payloads
 
 // Mount API routes
