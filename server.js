@@ -64,8 +64,15 @@ mongoose
     process.exit(1);
   });
 
-// Middleware
-app.use(cors()); // Enable CORS for all origins (configure as needed)
+
+// Allow only the frontend's origin
+const corsOptions = {
+  origin: 'https://event-management-system-pqbe.vercel.app', // Your frontend's URL
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
+  credentials: true, // Allow cookies and credentials
+};
+
+app.use(cors(corsOptions));
 app.use(express.json()); // Parse incoming JSON payloads
 
 // Mount API routes
