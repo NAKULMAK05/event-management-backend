@@ -5,13 +5,16 @@ import crypto from 'crypto';
 // Initialize dotenv to load environment variables
 dotenv.config();
 
-// Function to generate a random JWT secret
-function generateJwtSecret() {
-  return crypto.randomBytes(32).toString('hex');
+// Ensure that JWT_SECRET is set
+if (!process.env.JWT_SECRET) {
+  console.error('Error: JWT_SECRET environment variable is not set!');
+  process.exit(1);
 }
 
-// Check if JWT_SECRET is defined; if not, generate and save i
-console.log('JWT_SECRET:', process.env.JWT_SECRET || 'undefined');
+console.log('JWT_SECRET is set.');
+
+// Use the environment variable for MongoDB connection, with a fallback for local development
+const MONGO_URI = process.env.MONGO_URI || "mongodb://localhost:27017/Event";
 
 // Import other modules after environment setup
 import express from 'express';
@@ -19,7 +22,6 @@ import mongoose from 'mongoose';
 import authRoutes from './routes/authRoutes.js';
 import eventRoutes from './routes/eventRoutes.js';
 import statRoutes from './routes/Stat.js';
-import cors from 'cors';
 import path from 'path';
 import userRoutes from './routes/userRoutes.js';
 import { fileURLToPath } from 'url';
@@ -32,8 +34,9 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 8000;
 
-// Connect to the database and generate a test token
-mongoose.connect("mongodb://localhost:27017/Event", { useNewUrlParser: true, useUnifiedTopology: true })
+// Connect to the database using MONGO_URI
+mongoose
+  .connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(async () => {
     console.log("✅ Database connected successfully");
 
@@ -63,8 +66,7 @@ mongoose.connect("mongodb://localhost:27017/Event", { useNewUrlParser: true, use
     process.exit(1);
   });
 
-// Use middleware
-app.use(cors());
+// Use JSON middleware
 app.use(express.json());
 
 // Mount routes
