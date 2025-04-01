@@ -69,7 +69,7 @@ mongoose
 
 // Allow only the frontend's origin
 const corsOptions = {
-  origin: 'https://event-management-system-pqbe.vercel.app', // Your frontend's URL
+  origin: 'https://event-management-system-frontend-eight.vercel.app', // Your frontend's URL
   methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
   credentials: true, // Allow cookies and credentials
 };
